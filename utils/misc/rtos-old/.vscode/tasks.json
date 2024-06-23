@@ -1,0 +1,155 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Compile - Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "make",
+			"args": [
+				"-j4"
+			],
+			"dependsOn": [
+				"Build - Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		
+		{
+			"type": "shell",
+			"label": "Build - Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "cmake",
+			"args": [
+				"..",
+				"-DCMAKE_BUILD_TYPE=Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Compile - Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "make",
+			"args": [
+				"-j4"
+			],
+			"dependsOn": [
+				"Build - Release"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Build - Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "cmake",
+			"args": [
+				"..",
+				"-DCMAKE_BUILD_TYPE=Release"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Run Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"write",
+				"STM_FreeRTOS.bin",
+				"0x8000000"
+			],
+			"dependsOn": [
+				"Compile - Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Run Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"write",
+				"STM_FreeRTOS.bin",
+				"0x8000000"
+			],
+			"dependsOn": [
+				"Compile - Release"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Erase Target",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"erase"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+
+		{
+			"type": "shell",
+			"label": "Clean Project",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "rm",
+			"args": [
+				"-rf",
+				"*"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		}
+	],
+}

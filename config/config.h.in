@@ -1,0 +1,14 @@
+#ifndef CONF_H
+#define CONF_H
+
+#include <stdint.h>
+
+static const char * const PROJECT_NAME = "@PROJECT_NAME@";
+static const char * const PROJECT_VERSION = "@PROJECT_VERSION@";
+static const int32_t PROJECT_VERSION_MAJOR =  @PROJECT_VERSION_MAJOR@;
+static const int32_t PROJECT_VERSION_MINOR = @PROJECT_VERSION_MINOR@;
+static const int32_t PROJECT_VERSION_PATCH = @PROJECT_VERSION_PATCH@;
+static const char * const GIT_SHA = "@GIT_SHA@";
+
+#endif // CONF_H
+

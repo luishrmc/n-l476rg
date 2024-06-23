@@ -1,0 +1,225 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Compile - Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "make",
+			"args": [
+				"-j4"
+			],
+			"dependsOn": [
+				"Build - Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Build - Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "cmake",
+			"args": [
+				"..",
+				"-DCMAKE_BUILD_TYPE=Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Build - Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "cmake",
+			"args": [
+				"..",
+				"-DCMAKE_BUILD_TYPE=Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Compile - Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "make",
+			"args": [
+				"-j4"
+			],
+			"dependsOn": [
+				"Build - Release"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Run Debug",
+			"options": {
+				"cwd": "${workspaceFolder}/build/app"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"--connect-under-reset",
+				"write",
+				"blink.bin",
+				"0x8000000"
+			],
+			"dependsOn": [
+				"Compile - Debug"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Run Release",
+			"options": {
+				"cwd": "${workspaceFolder}/build/app"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"write",
+				"blink.bin",
+				"0x8000000"
+			],
+			"dependsOn": [
+				"Compile - Release"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Erase Target",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"command": "st-flash",
+			"args": [
+				"--reset",
+				"erase"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "test"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Clean Project",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "rm",
+			"args": [
+				"-rf",
+				"*",
+				"&&",
+				"touch",
+				".gitkeep"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "none"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Set Device",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"command": "sed",
+			"args": [
+				"-i",
+				"s/^#define DEVICE .*/#define DEVICE ${input:DEVICE}/",
+				"app/inc/controllers/mainController.h"
+			],
+			"dependsOn": [
+				"CMake Set Device"
+			],
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "CMake Set Device",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "cmake",
+			"args": [
+				"..",
+				"-U",
+				"DEVICE",
+				"-D",
+				"DEVICE=${input:DEVICE}"
+			],
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Run Test",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "ctest",
+			"args": [
+				"--output-on-failure"
+			],
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Doxygen",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"command": "make",
+			"args": [
+				"docs",
+			],
+			"dependsOn": [
+				"Compile - Debug"
+			],
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"type": "pickString",
+			"id": "DEVICE",
+			"description": "Select the device",
+			"options": [
+				"TAG",
+				"ANCHOR",
+				"BEACON"
+			],
+			"default": "TAG"
+		}
+	]
+}

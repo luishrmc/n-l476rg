@@ -1,0 +1,13 @@
+{
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "cortex-debug.JLinkGDBServerPath": "/usr/bin/JLinkGDBServer",
+    "cortex-debug.stutilPath": "/usr/bin/st-util",
+    "cortex-debug.openocdPath": "/usr/bin/openocd",
+    
+    "C_Cpp.errorSquiggles": "disabled",
+    "cmake.configureOnOpen": false,
+    "cortex-debug.variableUseNaturalFormat": false,
+    "files.associations": {
+        "main.h": "c"
+    }
+}
