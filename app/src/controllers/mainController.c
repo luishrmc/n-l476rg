@@ -1,5 +1,8 @@
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "mainController.h"
+#include "uartDriver.h"
+#include "config.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -10,12 +13,11 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef huart2;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART2_UART_Init(void);
+uartDriver_t u2;
 
 /* Private user code ---------------------------------------------------------*/
 
@@ -25,9 +27,6 @@ static void MX_USART2_UART_Init(void);
  */
 int main(void)
 {
-
-    /* MCU Configuration--------------------------------------------------------*/
-
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
@@ -36,7 +35,8 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_USART2_UART_Init();
+    udInit(&u2, UART2);
+    printf("START: %s - v%s - %s\r\n", PROJECT_NAME, PROJECT_VERSION, PROJECT_BUILD);
 
     uint32_t tim = 0xFFFFF;
 
@@ -60,11 +60,8 @@ int main(void)
  */
 void HAL_MspInit(void)
 {
-
     __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
-
-    /* System interrupt init*/
 }
 
 /**
@@ -112,69 +109,6 @@ void SystemClock_Config(void)
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
     {
         Error_Handler();
-    }
-}
-
-/**
- * @brief USART2 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_USART2_UART_Init(void)
-{
-
-    huart2.Instance = USART2;
-    huart2.Init.BaudRate = 115200;
-    huart2.Init.WordLength = UART_WORDLENGTH_8B;
-    huart2.Init.StopBits = UART_STOPBITS_1;
-    huart2.Init.Parity = UART_PARITY_NONE;
-    huart2.Init.Mode = UART_MODE_TX_RX;
-    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-    huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-    huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-    if (HAL_UART_Init(&huart2) != HAL_OK)
-    {
-        Error_Handler();
-    }
-}
-
-/**
- * @brief UART MSP Initialization
- * This function configures the hardware resources used in this example
- * @param huart: UART handle pointer
- * @retval None
- */
-void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-    if (huart->Instance == USART2)
-    {
-
-        /** Initializes the peripherals clock
-         */
-        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
-        PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
-        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-        {
-            Error_Handler();
-        }
-
-        /* Peripheral clock enable */
-        __HAL_RCC_USART2_CLK_ENABLE();
-
-        __HAL_RCC_GPIOA_CLK_ENABLE();
-        /**USART2 GPIO Configuration
-        PA2     ------> USART2_TX
-        PA3     ------> USART2_RX
-        */
-        GPIO_InitStruct.Pin = USART_TX_Pin | USART_RX_Pin;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
     }
 }
 

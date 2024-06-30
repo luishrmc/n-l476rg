@@ -45,7 +45,7 @@
 			"command": "cmake",
 			"args": [
 				"..",
-				"-DCMAKE_BUILD_TYPE=Debug"
+				"-DCMAKE_BUILD_TYPE=Release"
 			],
 			"problemMatcher": [],
 			"group": {
@@ -150,39 +150,6 @@
 		},
 		{
 			"type": "shell",
-			"label": "Set Device",
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"command": "sed",
-			"args": [
-				"-i",
-				"s/^#define DEVICE .*/#define DEVICE ${input:DEVICE}/",
-				"app/inc/controllers/mainController.h"
-			],
-			"dependsOn": [
-				"CMake Set Device"
-			],
-			"problemMatcher": []
-		},
-		{
-			"type": "shell",
-			"label": "CMake Set Device",
-			"options": {
-				"cwd": "${workspaceFolder}/build"
-			},
-			"command": "cmake",
-			"args": [
-				"..",
-				"-U",
-				"DEVICE",
-				"-D",
-				"DEVICE=${input:DEVICE}"
-			],
-			"problemMatcher": []
-		},
-		{
-			"type": "shell",
 			"label": "Run Test",
 			"options": {
 				"cwd": "${workspaceFolder}/build"
@@ -207,19 +174,6 @@
 				"Compile - Debug"
 			],
 			"problemMatcher": []
-		}
-	],
-	"inputs": [
-		{
-			"type": "pickString",
-			"id": "DEVICE",
-			"description": "Select the device",
-			"options": [
-				"TAG",
-				"ANCHOR",
-				"BEACON"
-			],
-			"default": "TAG"
 		}
 	]
 }

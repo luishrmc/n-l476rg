@@ -66,6 +66,13 @@ if(ENABLE_FREERTOS)
     set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 endif()
 
+# ------------------------------------ FREE RTOS ------------------------------------ #
+option(ENABLE_ZEPHYR "Enable Zephyr" OFF)
+
+if(ENABLE_ZEPHYR)
+    # //TODO
+endif()
+
 # ------------------------------------ OPTIONS ------------------------------------ #
 option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)
 
@@ -93,6 +100,11 @@ add_subdirectory(lib)
 # ------------------------------------ FREE RTOS INCLUDE/COMPILE ------------------------------------ #
 if(ENABLE_FREERTOS)
     CPMAddPackage("gh:FreeRTOS/FreeRTOS-Kernel#V11.1.0")
+endif()
+
+if(ENABLE_ZEPHYR)
+    # //TODO
+    # CPMAddPackage("gh:zephyrproject-rtos/zephyr#v3.6.0")
 endif()
 
 # ------------------------------------ UNITY TEST ------------------------------------ #
