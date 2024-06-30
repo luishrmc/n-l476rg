@@ -81,7 +81,7 @@
 				"--reset",
 				"--connect-under-reset",
 				"write",
-				"blink.bin",
+				"freeRTOS.bin",
 				"0x8000000"
 			],
 			"dependsOn": [
@@ -102,7 +102,7 @@
 			"args": [
 				"--reset",
 				"write",
-				"blink.bin",
+				"freeRTOS.bin",
 				"0x8000000"
 			],
 			"dependsOn": [
