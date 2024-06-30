@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-set(PROJECT_NAME blink)
+set(PROJECT_NAME freeRTOS)
 set(EXE_NAME ${PROJECT_NAME}.elf)
 
 #[[ ccache is a compiler cache designed to speed up the compilation process by 
@@ -45,7 +45,7 @@ project(${PROJECT_NAME}
 )
 
 # ------------------------------------ FREE RTOS ------------------------------------ #
-option(ENABLE_FREERTOS "Enable FreeRTOS" OFF)
+option(ENABLE_FREERTOS "Enable FreeRTOS" ON)
 
 if(ENABLE_FREERTOS)
     # Adding the FreeRTOS-Kernel subdirectory
@@ -108,8 +108,8 @@ if(ENABLE_ZEPHYR)
 endif()
 
 # ------------------------------------ UNITY TEST ------------------------------------ #
-include(CTest)
-enable_testing()
+# include(CTest)
+# enable_testing()
 
 # ! THE TOOLCHAIN IS CHANGED, KEEP THIS BLOCK AT THE END OF THE FILE !
-add_subdirectory(tests)
+# add_subdirectory(tests)

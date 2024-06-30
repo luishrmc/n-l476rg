@@ -17,6 +17,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart2;
+extern TIM_HandleTypeDef htim6;
 /******************************************************************************/
 /*           Cortex-M4 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
@@ -76,33 +77,25 @@ void UsageFault_Handler(void)
 }
 
 /**
- * @brief This function handles System service call via SWI instruction.
- */
-void SVC_Handler(void)
-{
-}
-
-/**
  * @brief This function handles Debug monitor.
  */
 void DebugMon_Handler(void)
 {
 }
 
-/**
- * @brief This function handles Pendable request for system service.
- */
-void PendSV_Handler(void)
-{
-}
+/******************************************************************************/
+/* STM32L4xx Peripheral Interrupt Handlers                                    */
+/* Add here the Interrupt Handlers for the used peripherals.                  */
+/* For the available peripheral interrupt handler names,                      */
+/* please refer to the startup file (startup_stm32l4xx.s).                    */
+/******************************************************************************/
 
 /**
- * @brief This function handles System tick timer.
+ * @brief This function handles TIM6 global interrupt, DAC channel1 and channel2 underrun error interrupts.
  */
-void SysTick_Handler(void)
+void TIM6_DAC_IRQHandler(void)
 {
-
-  HAL_IncTick();
+  HAL_TIM_IRQHandler(&htim6);
 }
 
 /**
@@ -112,9 +105,3 @@ void USART2_IRQHandler(void)
 {
   HAL_UART_IRQHandler(&huart2);
 }
-/******************************************************************************/
-/* STM32L4xx Peripheral Interrupt Handlers                                    */
-/* Add here the Interrupt Handlers for the used peripherals.                  */
-/* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32l4xx.s).                    */
-/******************************************************************************/

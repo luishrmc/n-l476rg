@@ -32,7 +32,7 @@
         {
             "name": "Debug - MCU",
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/build/app/blink.elf",
+            "executable": "${workspaceRoot}/build/app/freeRTOS.elf",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "stlink",

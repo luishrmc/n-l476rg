@@ -3,7 +3,9 @@
 #include "mainController.h"
 #include "uartDriver.h"
 #include "config.h"
-
+/* FreeRTOS includes. */
+#include "FreeRTOS.h"
+#include "task.h"
 /* Private includes ----------------------------------------------------------*/
 
 /* Private typedef -----------------------------------------------------------*/
@@ -19,6 +21,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 uartDriver_t u2;
 
+static void vTask1(void *pvParameters);
+TaskHandle_t xTask1;
 /* Private user code ---------------------------------------------------------*/
 
 /**
@@ -27,31 +31,29 @@ uartDriver_t u2;
  */
 int main(void)
 {
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    BaseType_t xStatus;
+
     HAL_Init();
-
-    /* Configure the system clock */
     SystemClock_Config();
-
-    /* Initialize all configured peripherals */
     MX_GPIO_Init();
     udInit(&u2, UART2);
+
+    /* In FreeRTOS stack is not in bytes, but in sizeof(StackType_t) which is 4 on ARM ports.       */
+    /* Stack size should be therefore 4 byte aligned in order to avoid division caused side effects */
+    uint32_t stackSize = (1024 * 1);
+    uint32_t stack = stackSize / sizeof(StackType_t);
+
+    xStatus = xTaskCreate(vTask1, "Task1", (uint16_t)stack, NULL, 2, &xTask1);
+    configASSERT(xStatus == pdPASS);
+
     printf("START: %s - v%s - %s\r\n", PROJECT_NAME, PROJECT_VERSION, PROJECT_BUILD);
 
-    uint32_t tim = 0xFFFFF;
+    // start the freeRTOS scheduler
+    vTaskStartScheduler();
 
     /* Infinite loop */
     while (1)
     {
-        if (tim == 0)
-        {
-            tim = 0xFFFFF;
-            HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-        }
-        else
-        {
-            tim--;
-        }
     }
 }
 
@@ -62,6 +64,16 @@ void HAL_MspInit(void)
 {
     __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
+    HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
+}
+
+static void vTask1(void *pvParameters)
+{
+    while (1)
+    {
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
 }
 
 /**
@@ -142,6 +154,22 @@ static void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+}
+
+/**
+ * @brief  Period elapsed callback in non blocking mode
+ * @note   This function is called  when TIM6 interrupt took place, inside
+ * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+ * a global variable "uwTick" used as application time base.
+ * @param  htim : TIM handle
+ * @retval None
+ */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM6)
+    {
+        HAL_IncTick();
+    }
 }
 
 /**
