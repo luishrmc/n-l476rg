@@ -31,6 +31,9 @@
 				"..",
 				"-DCMAKE_BUILD_TYPE=Debug"
 			],
+			"dependsOn": [
+				"Gen Config"
+			],
 			"problemMatcher": [],
 			"group": {
 				"kind": "none"
@@ -46,6 +49,9 @@
 			"args": [
 				"..",
 				"-DCMAKE_BUILD_TYPE=Release"
+			],
+			"dependsOn": [
+				"Gen Config"
 			],
 			"problemMatcher": [],
 			"group": {
@@ -173,6 +179,15 @@
 			"dependsOn": [
 				"Compile - Debug"
 			],
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Gen Config",
+			"options": {
+				"cwd": "${workspaceFolder}/config"
+			},
+			"command": "genconfig",
 			"problemMatcher": []
 		}
 	]

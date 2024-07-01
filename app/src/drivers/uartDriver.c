@@ -14,6 +14,8 @@
 #include "stm32l4xx_hal.h"
 #include "stm32l476xx.h"
 #include <string.h>
+#include "config.h"
+
 #define USART2_RX GPIO_PIN_3
 #define USART2_TX GPIO_PIN_2
 #define USART2_PORT GPIOA
@@ -48,6 +50,8 @@ void udInit(uartDriver_t *self, uInst instance)
     initQueue(&self->rx);
     initQueue(&self->tx);
     self->inst = instance;
+
+    printf("START: %s - v%s - %s\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
 
     switch (instance)
     {
@@ -92,7 +96,7 @@ void udInit(uartDriver_t *self, uInst instance)
         __HAL_RCC_USART2_CLK_ENABLE();
         __HAL_RCC_GPIOA_CLK_ENABLE();
 
-        GPIO_InitStruct.Pin = USART2_TX | USART2_RX;
+        GPIO_InitStruct.Pin = (uint16_t)(1 << CONFIG_USART2_TX) | (uint16_t)(1 << CONFIG_USART2_RX);
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

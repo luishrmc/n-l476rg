@@ -46,7 +46,7 @@ int main(void)
     xStatus = xTaskCreate(vTask1, "Task1", (uint16_t)stack, NULL, 2, &xTask1);
     configASSERT(xStatus == pdPASS);
 
-    printf("START: %s - v%s - %s\r\n", PROJECT_NAME, PROJECT_VERSION, PROJECT_BUILD);
+    printf("START: %s - v%s - %s\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
 
     // start the freeRTOS scheduler
     vTaskStartScheduler();

@@ -1,0 +1,21 @@
+mainmenu "Project Configuration"
+
+menu "Project"
+config PROJECT_NAME
+	string "Project Name"
+	default "@PROJECT_NAME@"
+
+config PROJECT_VERSION
+	string "Project Version"
+	default "@PROJECT_VERSION@"
+
+config PROJECT_BUILD
+	string "Project Build Type"
+	default "@CMAKE_BUILD_TYPE@"
+endmenu
+
+menu "Application"
+rsource "controllers/Kconfig"
+rsource "drivers/Kconfig"
+rsource "services/Kconfig"
+endmenu

@@ -6,7 +6,7 @@
     
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.configureOnOpen": false,
-    "cortex-debug.variableUseNaturalFormat": false,
+    "cortex-debug.variableUseNaturalFormat": true,
     "files.associations": {
         "sleep.h": "c",
         "task.h": "c",
