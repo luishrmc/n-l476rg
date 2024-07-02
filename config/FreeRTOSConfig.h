@@ -137,6 +137,12 @@ standard names. */
 
 #define xPortSysTickHandler SysTick_Handler
 
+// SEGGER SYSTEM VIEW MODIFICATION
+// #include "SEGGER_SYSVIEW_FreeRTOS.h"
+#define INCLUDE_xTaskGetIdleTaskHandle 	1
+#define INCLUDE_pxTaskGetStackStart 	1
+#define configUSE_TRACE_FACILITY 1
+
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 
 #endif /* FREERTOS_CONFIG_H */

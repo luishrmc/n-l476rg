@@ -183,6 +183,15 @@
 		},
 		{
 			"type": "shell",
+			"label": "Set Config",
+			"options": {
+				"cwd": "${workspaceFolder}/config"
+			},
+			"command": "guiconfig",
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
 			"label": "Gen Config",
 			"options": {
 				"cwd": "${workspaceFolder}/config"
