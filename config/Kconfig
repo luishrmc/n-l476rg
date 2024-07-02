@@ -13,9 +13,3 @@ config PROJECT_BUILD
 	string "Project Build Type"
 	default "@CMAKE_BUILD_TYPE@"
 endmenu
-
-menu "Application"
-rsource "controllers/Kconfig"
-rsource "drivers/Kconfig"
-rsource "services/Kconfig"
-endmenu

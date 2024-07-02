@@ -45,6 +45,7 @@ target_link_libraries(${EXE_NAME} PRIVATE
     UTILS
     freertos_kernel
     freertos_config
+    SEGGER
 )
 
 target_compile_definitions(${EXE_NAME} PRIVATE

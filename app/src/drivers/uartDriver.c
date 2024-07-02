@@ -24,13 +24,13 @@
 #define USART1_TX GPIO_PIN_9
 #define USART1_PORT GPIOA
 
-#ifdef __GNUC__
-/* With GCC, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-#define USART_PRINT int __io_putchar(int ch)
-#else
-#define USART_PRINT int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
+// #ifdef __GNUC__
+// /* With GCC, small printf (option LD Linker->Libraries->Small printf
+//    set to 'Yes') calls __io_putchar() */
+// #define USART_PRINT int __io_putchar(int ch)
+// #else
+// #define USART_PRINT int fputc(int ch, FILE *f)
+// #endif /* __GNUC__ */
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -96,7 +96,8 @@ void udInit(uartDriver_t *self, uInst instance)
         __HAL_RCC_USART2_CLK_ENABLE();
         __HAL_RCC_GPIOA_CLK_ENABLE();
 
-        GPIO_InitStruct.Pin = (uint16_t)(1 << CONFIG_USART2_TX) | (uint16_t)(1 << CONFIG_USART2_RX);
+        // GPIO_InitStruct.Pin = (uint16_t)(1 << CONFIG_USART2_TX) | (uint16_t)(1 << CONFIG_USART2_RX);
+        GPIO_InitStruct.Pin = USART2_TX | USART2_RX;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -183,8 +184,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  * @param  None
  * @retval None
  */
-USART_PRINT
-{
-    HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
-    return ch;
-}
+// USART_PRINT
+// {
+//     HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+//     return ch;
+// }

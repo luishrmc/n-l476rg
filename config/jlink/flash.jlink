@@ -1,0 +1,7 @@
+device STM32L476RG
+si SWD
+speed 4000
+autoconnect 1 
+NoGui 1
+loadfile ../../build/app/freeRTOS.elf reset
+Exit

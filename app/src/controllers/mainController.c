@@ -11,7 +11,7 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-
+#define DWT_CTRL (*(volatile uint32_t*)0xE0001000)
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -36,7 +36,15 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
-    udInit(&u2, UART2);
+    // udInit(&u2, UART2);
+
+    /* Enable the Cortex-M4 CYCCNT counter register.
+     * Address: 0xE0001000
+     * Access: Read/Write
+     * Reset State: 0x40000000
+     */
+    DWT_CTRL |= (1 << 0);
+    traceSTART();
 
     /* In FreeRTOS stack is not in bytes, but in sizeof(StackType_t) which is 4 on ARM ports.       */
     /* Stack size should be therefore 4 byte aligned in order to avoid division caused side effects */
@@ -46,7 +54,7 @@ int main(void)
     xStatus = xTaskCreate(vTask1, "Task1", (uint16_t)stack, NULL, 2, &xTask1);
     configASSERT(xStatus == pdPASS);
 
-    printf("START: %s - v%s - %s\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
+    // printf("START: %s - v%s - %s\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
 
     // start the freeRTOS scheduler
     vTaskStartScheduler();

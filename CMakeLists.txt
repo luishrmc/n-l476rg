@@ -57,6 +57,9 @@ if(ENABLE_FREERTOS)
     target_include_directories(freertos_config
         INTERFACE
         "${CMAKE_CURRENT_SOURCE_DIR}/config"
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib/SEGGER/SystemView_Src_V354/Sample/FreeRTOSV11"
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib/SEGGER/SystemView_Src_V354/SEGGER"
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib/SEGGER/SystemView_Src_V354/Config"
     )
 
     # Select the heap port.  values between 1-4 will pick a heap.

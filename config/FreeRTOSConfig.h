@@ -97,6 +97,10 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelay                   1
 #define INCLUDE_xTaskGetSchedulerState       1
 #define INCLUDE_xTaskGetHandle 				       1
+#define INCLUDE_xTaskGetIdleTaskHandle                          1
+#define INCLUDE_pxTaskGetStackStart                             1
+
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
@@ -136,12 +140,6 @@ standard names. */
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 
 #define xPortSysTickHandler SysTick_Handler
-
-// SEGGER SYSTEM VIEW MODIFICATION
-// #include "SEGGER_SYSVIEW_FreeRTOS.h"
-#define INCLUDE_xTaskGetIdleTaskHandle 	1
-#define INCLUDE_pxTaskGetStackStart 	1
-#define configUSE_TRACE_FACILITY 1
 
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 

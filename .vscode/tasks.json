@@ -80,15 +80,12 @@
 			"type": "shell",
 			"label": "Run Debug",
 			"options": {
-				"cwd": "${workspaceFolder}/build/app"
+				"cwd": "${workspaceFolder}/config/jlink"
 			},
-			"command": "st-flash",
+			"command": "JLinkExe",
 			"args": [
-				"--reset",
-				"--connect-under-reset",
-				"write",
-				"freeRTOS.bin",
-				"0x8000000"
+				"-CommandFile",
+				"flash.jlink"
 			],
 			"dependsOn": [
 				"Compile - Debug"
@@ -102,14 +99,12 @@
 			"type": "shell",
 			"label": "Run Release",
 			"options": {
-				"cwd": "${workspaceFolder}/build/app"
+				"cwd": "${workspaceFolder}/config/jlink"
 			},
-			"command": "st-flash",
+			"command": "JLinkExe",
 			"args": [
-				"--reset",
-				"write",
-				"freeRTOS.bin",
-				"0x8000000"
+				"-CommandFile",
+				"flash.jlink"
 			],
 			"dependsOn": [
 				"Compile - Release"
@@ -123,12 +118,12 @@
 			"type": "shell",
 			"label": "Erase Target",
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}/config/jlink"
 			},
-			"command": "st-flash",
+			"command": "JLinkExe",
 			"args": [
-				"--reset",
-				"erase"
+				"-CommandFile",
+				"erase.jlink"
 			],
 			"problemMatcher": [],
 			"group": {
