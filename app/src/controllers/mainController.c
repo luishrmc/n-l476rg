@@ -6,12 +6,14 @@
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+/* RTT includes. */
+#include "SEGGER_RTT.h"
 /* Private includes ----------------------------------------------------------*/
 
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define DWT_CTRL (*(volatile uint32_t*)0xE0001000)
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -36,16 +38,8 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
-    // udInit(&u2, UART2);
 
-    /* Enable the Cortex-M4 CYCCNT counter register.
-     * Address: 0xE0001000
-     * Access: Read/Write
-     * Reset State: 0x40000000
-     */
-    DWT_CTRL |= (1 << 0);
     traceSTART();
-
     /* In FreeRTOS stack is not in bytes, but in sizeof(StackType_t) which is 4 on ARM ports.       */
     /* Stack size should be therefore 4 byte aligned in order to avoid division caused side effects */
     uint32_t stackSize = (1024 * 1);
@@ -54,7 +48,8 @@ int main(void)
     xStatus = xTaskCreate(vTask1, "Task1", (uint16_t)stack, NULL, 2, &xTask1);
     configASSERT(xStatus == pdPASS);
 
-    // printf("START: %s - v%s - %s\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
+    SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
+    SEGGER_RTT_printf(0, "###### %s - v%s (%s) ######\r\n", CONFIG_PROJECT_NAME, CONFIG_PROJECT_VERSION, CONFIG_PROJECT_BUILD);
 
     // start the freeRTOS scheduler
     vTaskStartScheduler();
@@ -79,6 +74,7 @@ static void vTask1(void *pvParameters)
 {
     while (1)
     {
+        SEGGER_SYSVIEW_PrintfTarget("L2");
         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
         vTaskDelay(pdMS_TO_TICKS(500));
     }
