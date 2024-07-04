@@ -21,10 +21,16 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-uartDriver_t u2;
 
 static void vTask1(void *pvParameters);
+static void vTask2(void *pvParameters);
+static void vTask3(void *pvParameters);
+static void vTask4(void *pvParameters);
+
 TaskHandle_t xTask1;
+TaskHandle_t xTask2;
+TaskHandle_t xTask3;
+TaskHandle_t xTask4;
 /* Private user code ---------------------------------------------------------*/
 
 /**
@@ -40,12 +46,22 @@ int main(void)
     MX_GPIO_Init();
 
     traceSTART();
+
     /* In FreeRTOS stack is not in bytes, but in sizeof(StackType_t) which is 4 on ARM ports.       */
     /* Stack size should be therefore 4 byte aligned in order to avoid division caused side effects */
-    uint32_t stackSize = (1024 * 1);
+    uint32_t stackSize = (1024 / 4);
     uint32_t stack = stackSize / sizeof(StackType_t);
 
     xStatus = xTaskCreate(vTask1, "Task1", (uint16_t)stack, NULL, 2, &xTask1);
+    configASSERT(xStatus == pdPASS);
+
+    xStatus = xTaskCreate(vTask2, "Task2", (uint16_t)stack, NULL, 2, &xTask2);
+    configASSERT(xStatus == pdPASS);
+
+    xStatus = xTaskCreate(vTask3, "Task3", (uint16_t)stack, NULL, 2, &xTask3);
+    configASSERT(xStatus == pdPASS);
+
+    xStatus = xTaskCreate(vTask4, "Task4", (uint16_t)stack, NULL, 2, &xTask4);
     configASSERT(xStatus == pdPASS);
 
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
@@ -74,9 +90,40 @@ static void vTask1(void *pvParameters)
 {
     while (1)
     {
-        SEGGER_SYSVIEW_PrintfTarget("L2");
+        SEGGER_SYSVIEW_PrintfTarget("T1");
+        SEGGER_RTT_WriteString(0, "T1\n");
         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        vTaskDelay(pdMS_TO_TICKS(200));
+    }
+}
+
+static void vTask2(void *pvParameters)
+{
+    while (1)
+    {
+        SEGGER_RTT_WriteString(0, "T2\n");
+        SEGGER_SYSVIEW_PrintfTarget("T2");
+        vTaskDelay(pdMS_TO_TICKS(300));
+    }
+}
+
+static void vTask3(void *pvParameters)
+{
+    while (1)
+    {
+        SEGGER_RTT_WriteString(0, "T3\n");
+        SEGGER_SYSVIEW_PrintfTarget("T3");
         vTaskDelay(pdMS_TO_TICKS(500));
+    }
+}
+
+static void vTask4(void *pvParameters)
+{
+    while (1)
+    {
+        SEGGER_RTT_WriteString(0, "T4\n");
+        SEGGER_SYSVIEW_PrintfTarget("T4");
+        vTaskDelay(pdMS_TO_TICKS(700));
     }
 }
 

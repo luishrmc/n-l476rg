@@ -65,4 +65,6 @@
         "stm32f1xx.h": "c",
         "stm32l476xx.h": "c"
     },
+    "cortex-debug.liveWatchRefreshRate": 1000,
+    "mcu-debug.rtos-views.disableStackPeaks": true,
 }
